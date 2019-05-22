@@ -9,7 +9,7 @@ namespace Game3
 {
 
 
-    public class CharacterEntity
+    public class CharacterEntityBad
     {
         
         static Texture2D characterSheetTexture;
@@ -21,9 +21,8 @@ namespace Game3
         Animation standUp;
         Animation standLeft;
         Animation standRight;
-        Animation food;
+        Vector2 chase;
         Animation currentAnimation;        
-        Vector2 foodLocation;        
         int csY;
 
         int counter = 0;
@@ -40,21 +39,26 @@ namespace Game3
             get;
             set;
         }
- 
+
+        public float goodX
+        {
+            get;
+            set;
+        }
+
+        public float goodY
+        {
+            get;
+            set;
+        }
 
 
-        public CharacterEntity(Texture2D character, int spriteSheetY)
+
+        public CharacterEntityBad(Texture2D character, int spriteSheetY)
         {
             characterSheetTexture = character;
-            csY = spriteSheetY; 
-
-            food = new Animation();
-            food.AddFrame(new Rectangle(0, 112, 16, 16), TimeSpan.FromSeconds(.25));
-            food.AddFrame(new Rectangle(16, 112, 16, 16), TimeSpan.FromSeconds(.25));
-            food.AddFrame(new Rectangle(0, 112, 16, 16), TimeSpan.FromSeconds(.25));
-            food.AddFrame(new Rectangle(32, 112, 16, 16), TimeSpan.FromSeconds(.25));
-
-            foodLocation = PickLocation();        
+            csY = spriteSheetY;
+           
 
             walkDown = new Animation();
             walkDown.AddFrame(new Rectangle(0, csY, 16, 16), TimeSpan.FromSeconds(.25));
@@ -93,35 +97,21 @@ namespace Game3
             standRight = new Animation();
             standRight.AddFrame(new Rectangle(96, csY, 16, 16), TimeSpan.FromSeconds(.25));
         }
-
-        Vector2 PickLocation()
-        {
-            Random random = new Random();
-            int randY = random.Next(0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-            int randX = random.Next(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
-           
-            Vector2 location = new Vector2(randX, randY);
-
-            return location;
-        }
-
         
 
         Vector2 GetDesiredVelocityFromInput()
         {
             Vector2 desiredVelocity = new Vector2();
-
-            TouchCollection touchCollection = TouchPanel.GetState();
-            
-            if (touchCollection.Count > 0)
+            Vector2 chase = new Vector2(goodX, goodY);
+            if (chase.X > 0 || chase.Y > 0)
             {
-                desiredVelocity.X = touchCollection[0].Position.X  - this.X;
-                desiredVelocity.Y = touchCollection[0].Position.Y - this.Y;
+                desiredVelocity.X = chase.X  - this.X;
+                desiredVelocity.Y = chase.Y - this.Y;
 
                 if (desiredVelocity.X != 0 || desiredVelocity.Y != 0)
                 {
                     desiredVelocity.Normalize();
-                    const float desiredSpeed = 400;
+                    const float desiredSpeed = 410;
                     desiredVelocity *= desiredSpeed;
                 }
             }
@@ -129,26 +119,9 @@ namespace Game3
             return desiredVelocity;
         }
 
+         
 
-
-        private bool Eat(Vector2 pos)
-        {
-            Vector2 charPos = new Vector2(this.X, this.Y);
-
-            if(Vector2.Distance(charPos, pos) > 16)
-            {
-                return false;
-            }
-            else
-            {
-                foodLocation = PickLocation();
-                counter++;
-                return true;
-                
-            }
-          
-
-        }
+        
 
 
         public void Update(GameTime gameTime)
@@ -156,7 +129,7 @@ namespace Game3
             // temporary - we'll replace this with logic based off of which way the
             // character is moving when we add movement logic
 
-            food.Update(gameTime);
+           
             
             var velocity = GetDesiredVelocityFromInput();
 
@@ -220,27 +193,18 @@ namespace Game3
                 // is already standing, so no need to change the animation.
             }
 
-            Eat(foodLocation);
-            //GrowTrail();
-            
-            //walkDownBad.Update(gameTime);
+     
 
             currentAnimation.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 topLeftOfSprite = new Vector2(this.X, this.Y);
-            Vector2 foodVector = foodLocation;
-            
-            System.Drawing.Color tintColor = System.Drawing.Color.White;
-            var foodRectangle = food.CurrentRectangle;
+            Vector2 topLeftOfSprite = new Vector2(this.X, this.Y);                       
+            System.Drawing.Color tintColor = System.Drawing.Color.White;            
             var sourceRectangle = currentAnimation.CurrentRectangle;            
-            spriteBatch.Draw(characterSheetTexture, topLeftOfSprite, sourceRectangle, Color.White);
-            spriteBatch.Draw(characterSheetTexture, foodVector, foodRectangle, Color.White);
+            spriteBatch.Draw(characterSheetTexture, topLeftOfSprite, sourceRectangle, Color.White);           
             
         }
-
- 
     }
 }

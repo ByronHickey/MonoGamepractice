@@ -12,6 +12,8 @@ namespace Game3
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         CharacterEntity character;
+        CharacterEntityBad character2;
+        Vector2 startV = new Vector2(0, 0);
 
         public Game1()
         {
@@ -32,7 +34,19 @@ namespace Game3
         /// </summary>
         protected override void Initialize()
         {
-            character = new CharacterEntity(Content.Load<Texture2D>("charactersheet"));
+            character = new CharacterEntity(Content.Load<Texture2D>("charactersheet"), 96)
+            {
+                X = 200,
+                Y = 200,
+
+            };
+
+            character2 = new CharacterEntityBad(Content.Load<Texture2D>("charactersheet"), 0)
+            {
+                X = - 400,
+                Y = 200,
+
+            };
 
 
             base.Initialize();
@@ -79,6 +93,9 @@ namespace Game3
                 Exit();
 
             character.Update(gameTime);
+            character2.Update(gameTime);
+            character2.goodX = character.X;
+            character2.goodY = character.Y;
             base.Update(gameTime);
         }
 
@@ -94,6 +111,7 @@ namespace Game3
 
             spriteBatch.Begin();
             character.Draw(spriteBatch);
+            character2.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

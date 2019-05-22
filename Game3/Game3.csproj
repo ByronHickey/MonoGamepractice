@@ -60,6 +60,7 @@
     <Compile Include="Activity1.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationFrame.cs" />
+    <Compile Include="CharacterEntityBad.cs" />
     <Compile Include="CharacterEntity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

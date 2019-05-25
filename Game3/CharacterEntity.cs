@@ -22,6 +22,8 @@ namespace Game3
         Animation standLeft;
         Animation standRight;       
         Animation currentAnimation;
+        Vector2 desiredVelocity = new Vector2();
+        public bool clone = false;
         int csY;   
         
         public float X
@@ -35,7 +37,20 @@ namespace Game3
             get;
             set;
         }
- 
+
+        public float cloneX
+        {
+            get;
+            set;
+        }
+
+        public float cloneY
+        {
+            get;
+            set;
+        }
+
+
 
 
         public CharacterEntity(Texture2D character, int spriteSheetY)
@@ -87,11 +102,11 @@ namespace Game3
 
         Vector2 GetDesiredVelocityFromInput()
         {
-            Vector2 desiredVelocity = new Vector2();
+            
 
             TouchCollection touchCollection = TouchPanel.GetState();
             
-            if (touchCollection.Count > 0)
+            if (touchCollection.Count > 0 && !clone)
             {
                 desiredVelocity.X = touchCollection[0].Position.X  - this.X;
                 desiredVelocity.Y = touchCollection[0].Position.Y - this.Y;
@@ -103,6 +118,20 @@ namespace Game3
                     desiredVelocity *= desiredSpeed;
                 }
             }
+            else
+            {
+                Vector2 gap = new Vector2(cloneX, cloneY);
+                desiredVelocity.X = gap.X - this.X;
+                desiredVelocity.Y = gap.Y - this.Y;
+
+                if (desiredVelocity.X != 0 || desiredVelocity.Y != 0)
+                {
+                    desiredVelocity.Normalize();
+                    const float desiredSpeed = 400;
+                    desiredVelocity *= desiredSpeed;
+                }
+            }
+
 
             return desiredVelocity;
         }

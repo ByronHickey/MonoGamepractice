@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,8 @@ namespace Game3
 
             food = new Food(Content.Load<Texture2D>("charactersheet"), 112);
 
+            
+
             base.Initialize();
         }
 
@@ -101,10 +104,12 @@ namespace Game3
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();         
-
+            
             if (food.counter != snakeList.Count)
             {
-                CharacterEntity ce = (CharacterEntity)character.Clone();             
+                
+                CharacterEntity ce = (CharacterEntity)character.Clone();
+                ce.clone = true;
                 snakeList.Add(ce);             
                 
             }
@@ -119,12 +124,24 @@ namespace Game3
             character2.goodY = character.Y;
             food.goodX = character.X;
             food.goodY = character.Y;
-            Console.WriteLine("snakeList.Count");
-            Console.WriteLine(snakeList.Count);
-            foreach (var s in snakeList.Select((value, i) => new { i, value })) { }
-         
-            Console.WriteLine("food.counter");
-            Console.WriteLine(food.counter);
+
+            foreach (var s in snakeList.Select((value, i) => new { i, value }))
+            {
+                if (s.i > 1)
+                {
+                    var cl = s.i - 1;
+                    s.value.cloneX = snakeList[cl].X;
+                    s.value.cloneY = snakeList[cl].Y;
+
+                }
+                else
+                {
+                    s.value.cloneX = character.X;
+                    s.value.cloneY = character.Y;
+                }
+            }
+
+
 
             base.Update(gameTime);
         }

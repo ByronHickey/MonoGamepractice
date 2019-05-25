@@ -23,7 +23,8 @@ namespace Game3
         Animation standLeft;
         Animation standRight;
         Vector2 chase;
-        Animation currentAnimation;        
+        Animation currentAnimation;  
+        
         int csY;
 
         int counter = 0;

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -26,7 +26,7 @@ namespace Game3
         Vector2 foodLocation;        
         int csY;
 
-        int counter = 0;
+        public int counter = 0;
         
         
         public float X

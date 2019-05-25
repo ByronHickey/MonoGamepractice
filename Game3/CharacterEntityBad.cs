@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -111,7 +112,7 @@ namespace Game3
                 if (desiredVelocity.X != 0 || desiredVelocity.Y != 0)
                 {
                     desiredVelocity.Normalize();
-                    const float desiredSpeed = 410;
+                    const float desiredSpeed = 380;
                     desiredVelocity *= desiredSpeed;
                 }
             }
@@ -119,20 +120,33 @@ namespace Game3
             return desiredVelocity;
         }
 
-         
+        private bool Eat(Vector2 pos)
+        {
+            Vector2 charPos = new Vector2(this.X, this.Y);
 
-        
+            if (Vector2.Distance(charPos, pos) > 16)
+            {
+                return false;
+            }
+            else
+            {
+                
+                counter++;              
+                return true;
+
+            }
+
+
+        }
+
+
 
 
         public void Update(GameTime gameTime)
-        {
-            // temporary - we'll replace this with logic based off of which way the
-            // character is moving when we add movement logic
-
-           
+        {         
             
             var velocity = GetDesiredVelocityFromInput();
-
+            chase = new Vector2(goodX, goodY);
            
             this.X += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             this.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -193,8 +207,8 @@ namespace Game3
                 // is already standing, so no need to change the animation.
             }
 
-     
 
+            Eat(chase);
             currentAnimation.Update(gameTime);
         }
 

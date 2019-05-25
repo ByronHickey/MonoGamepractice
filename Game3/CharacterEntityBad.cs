@@ -131,7 +131,8 @@ namespace Game3
             else
             {
                 
-                counter++;              
+                counter++;
+                
                 return true;
 
             }

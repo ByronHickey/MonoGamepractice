@@ -9,7 +9,7 @@ namespace Game3
 {
 
 
-    public class CharacterEntity
+    public class CharacterEntity : ICloneable
     {
         
         static Texture2D characterSheetTexture;
@@ -20,14 +20,9 @@ namespace Game3
         Animation standDown;
         Animation standUp;
         Animation standLeft;
-        Animation standRight;
-        Animation food;
-        Animation currentAnimation;        
-        Vector2 foodLocation;        
-        int csY;
-
-        public int counter = 0;
-        
+        Animation standRight;       
+        Animation currentAnimation;
+        int csY;   
         
         public float X
         {
@@ -46,15 +41,7 @@ namespace Game3
         public CharacterEntity(Texture2D character, int spriteSheetY)
         {
             characterSheetTexture = character;
-            csY = spriteSheetY; 
-
-            food = new Animation();
-            food.AddFrame(new Rectangle(0, 112, 16, 16), TimeSpan.FromSeconds(.25));
-            food.AddFrame(new Rectangle(16, 112, 16, 16), TimeSpan.FromSeconds(.25));
-            food.AddFrame(new Rectangle(0, 112, 16, 16), TimeSpan.FromSeconds(.25));
-            food.AddFrame(new Rectangle(32, 112, 16, 16), TimeSpan.FromSeconds(.25));
-
-            foodLocation = PickLocation();        
+            csY = spriteSheetY;              
 
             walkDown = new Animation();
             walkDown.AddFrame(new Rectangle(0, csY, 16, 16), TimeSpan.FromSeconds(.25));
@@ -94,16 +81,7 @@ namespace Game3
             standRight.AddFrame(new Rectangle(96, csY, 16, 16), TimeSpan.FromSeconds(.25));
         }
 
-        Vector2 PickLocation()
-        {
-            Random random = new Random();
-            int randY = random.Next(0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-            int randX = random.Next(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
-           
-            Vector2 location = new Vector2(randX, randY);
-
-            return location;
-        }
+      
 
         
 
@@ -130,33 +108,8 @@ namespace Game3
         }
 
 
-
-        private bool Eat(Vector2 pos)
-        {
-            Vector2 charPos = new Vector2(this.X, this.Y);
-
-            if(Vector2.Distance(charPos, pos) > 16)
-            {
-                return false;
-            }
-            else
-            {
-                foodLocation = PickLocation();
-                counter++;
-                return true;
-                
-            }
-          
-
-        }
-
-
         public void Update(GameTime gameTime)
-        {
-            // temporary - we'll replace this with logic based off of which way the
-            // character is moving when we add movement logic
-
-            food.Update(gameTime);
+        {   
             
             var velocity = GetDesiredVelocityFromInput();
 
@@ -172,10 +125,12 @@ namespace Game3
                     if (velocity.X > 0)
                     {
                         currentAnimation = walkRight;
+                      
                     }
                     else
                     {
                         currentAnimation = walkLeft;
+                       
                     }
                 }
                 else
@@ -183,11 +138,13 @@ namespace Game3
                     if (velocity.Y > 0)
                     {
                         currentAnimation = walkDown;
+                 
                         
                     }
                     else
                     {
                         currentAnimation = walkUp;
+                        
                     }
                 }
             }
@@ -218,29 +175,26 @@ namespace Game3
 
                 // if none of the above code hit then the character
                 // is already standing, so no need to change the animation.
-            }
-
-            Eat(foodLocation);
-            //GrowTrail();
-            
-            //walkDownBad.Update(gameTime);
+            }        
 
             currentAnimation.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 topLeftOfSprite = new Vector2(this.X, this.Y);
-            Vector2 foodVector = foodLocation;
+            Vector2 topLeftOfSprite = new Vector2(this.X, this.Y);          
             
             System.Drawing.Color tintColor = System.Drawing.Color.White;
-            var foodRectangle = food.CurrentRectangle;
+      
             var sourceRectangle = currentAnimation.CurrentRectangle;            
             spriteBatch.Draw(characterSheetTexture, topLeftOfSprite, sourceRectangle, Color.White);
-            spriteBatch.Draw(characterSheetTexture, foodVector, foodRectangle, Color.White);
+         
             
         }
 
- 
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace Game3
 {
@@ -16,6 +16,7 @@ namespace Game3
         SpriteBatch spriteBatch;
         CharacterEntity character;
         CharacterEntityBad character2;
+        Food food;
         List<CharacterEntity> snakeList = new List<CharacterEntity>();
 
         Vector2 startV = new Vector2(0, 0);
@@ -55,6 +56,8 @@ namespace Game3
             };
 
             snakeList = new List<CharacterEntity>();
+
+            food = new Food(Content.Load<Texture2D>("charactersheet"), 112);
 
             base.Initialize();
         }
@@ -97,37 +100,31 @@ namespace Game3
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                Exit();
-            if(character.counter != snakeList.Count)
+                Exit();         
+
+            if (food.counter != snakeList.Count)
             {
+                CharacterEntity ce = (CharacterEntity)character.Clone();             
+                snakeList.Add(ce);             
                 
-                for(int i = 0; i < snakeList.Count; i++)
-                    {
-
-                    CharacterEntity ce = new CharacterEntity(Content.Load<Texture2D>("charactersheet"), 96)
-                    {
-                        X = 200,
-                        Y = 200,
-                    };
-                                                         
-
-                    snakeList.Add(ce);
-                    
-                    
-                }
-                Console.WriteLine("snakeList.Count");
-                Console.WriteLine(snakeList.Count);
             }
             character.Update(gameTime);
             character2.Update(gameTime);
-            foreach (var s in snakeList)
+            food.Update(gameTime);
+            foreach (var s in snakeList.ToArray())
             {
                 s.Update(gameTime);
             }
             character2.goodX = character.X;
             character2.goodY = character.Y;
-            Console.WriteLine("character.counter");
-            Console.WriteLine(character.counter);
+            food.goodX = character.X;
+            food.goodY = character.Y;
+            Console.WriteLine("snakeList.Count");
+            Console.WriteLine(snakeList.Count);
+            foreach (var s in snakeList.Select((value, i) => new { i, value })) { }
+         
+            Console.WriteLine("food.counter");
+            Console.WriteLine(food.counter);
 
             base.Update(gameTime);
         }
@@ -145,6 +142,7 @@ namespace Game3
             spriteBatch.Begin();
             character.Draw(spriteBatch);
             character2.Draw(spriteBatch);
+            food.Draw(spriteBatch);
             foreach(var s in snakeList)
             {
                 s.Draw(spriteBatch);

@@ -120,18 +120,23 @@ namespace Game3
             {
                 s.Update(gameTime);
             }
-            character2.goodX = character.X;
-            character2.goodY = character.Y;
+            if (food.counter <= 1)
+            {
+                character2.goodX = character.X;
+                character2.goodY = character.Y;
+            }
             food.goodX = character.X;
             food.goodY = character.Y;
 
             foreach (var s in snakeList.Select((value, i) => new { i, value }))
             {
-                if (s.i > 1)
+                if (s.i >= 1)
                 {
                     var cl = s.i - 1;
                     s.value.cloneX = snakeList[cl].X;
                     s.value.cloneY = snakeList[cl].Y;
+                    character2.goodX = s.value.X;
+                    character2.goodY = s.value.Y;
 
                 }
                 else

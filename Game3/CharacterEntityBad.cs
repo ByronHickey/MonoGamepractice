@@ -113,7 +113,7 @@ namespace Game3
                 if (desiredVelocity.X != 0 || desiredVelocity.Y != 0)
                 {
                     desiredVelocity.Normalize();
-                    const float desiredSpeed = 380;
+                    const float desiredSpeed = 395;
                     desiredVelocity *= desiredSpeed;
                 }
             }

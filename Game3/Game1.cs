@@ -49,7 +49,7 @@ namespace Game3
 
             };
 
-            character2 = new CharacterEntityBad(Content.Load<Texture2D>("charactersheet"), 0)
+            character2 = new CharacterEntityBad(Content.Load<Texture2D>("charactersheet"), 16)
             {
                 X = - 400,
                 Y = 200,
@@ -145,6 +145,14 @@ namespace Game3
                     s.value.cloneY = character.Y;
                 }
             }
+
+            if(character2.bonk && snakeList.Count() >=  1)
+            {
+                snakeList.Remove(snakeList[snakeList.Count() -1]);
+                food.counter--;
+                
+            }
+                
 
 
 

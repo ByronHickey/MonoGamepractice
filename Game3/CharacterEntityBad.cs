@@ -23,7 +23,8 @@ namespace Game3
         Animation standLeft;
         Animation standRight;
         Vector2 chase;
-        Animation currentAnimation;  
+        Animation currentAnimation;
+        public bool bonk = false;
         
         int csY;
 
@@ -113,7 +114,7 @@ namespace Game3
                 if (desiredVelocity.X != 0 || desiredVelocity.Y != 0)
                 {
                     desiredVelocity.Normalize();
-                    const float desiredSpeed = 395;
+                    const float desiredSpeed = 385;
                     desiredVelocity *= desiredSpeed;
                 }
             }
@@ -125,14 +126,15 @@ namespace Game3
         {
             Vector2 charPos = new Vector2(this.X, this.Y);
 
-            if (Vector2.Distance(charPos, pos) > 16)
+            if (Vector2.Distance(charPos, pos) > 5)
             {
+                bonk = false;
                 return false;
             }
             else
             {
-                
-                counter++;
+
+                bonk = true;
                 
                 return true;
 

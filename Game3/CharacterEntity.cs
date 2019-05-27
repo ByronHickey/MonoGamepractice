@@ -121,8 +121,8 @@ namespace Game3
             else
             {
                 Vector2 gap = new Vector2(cloneX, cloneY);
-                desiredVelocity.X = gap.X - this.X;
-                desiredVelocity.Y = gap.Y - this.Y;
+                desiredVelocity.X = (gap.X * 1) - this.X;
+                desiredVelocity.Y = (gap.Y * 1) - this.Y;
 
                 if (desiredVelocity.X != 0 || desiredVelocity.Y != 0)
                 {

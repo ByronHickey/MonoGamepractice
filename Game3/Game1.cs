@@ -44,8 +44,8 @@ namespace Game3
 
             character = new CharacterEntity(Content.Load<Texture2D>("charactersheet"), 96)
             {
-                X = 200,
-                Y = 200,
+                X = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2,
+                Y = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width /2,
 
             };
 

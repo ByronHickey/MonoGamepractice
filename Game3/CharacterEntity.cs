@@ -105,8 +105,13 @@ namespace Game3
             
 
             TouchCollection touchCollection = TouchPanel.GetState();
+            if(touchCollection.Count == 0)
+            {
+                desiredVelocity.X = 0;
+                desiredVelocity.Y = 0;
+            }
             
-            if (touchCollection.Count > 0 && !clone)
+            else if(touchCollection.Count > 0 && !clone)
             {
                 desiredVelocity.X = touchCollection[0].Position.X  - this.X;
                 desiredVelocity.Y = touchCollection[0].Position.Y - this.Y;
@@ -140,14 +145,14 @@ namespace Game3
         public void Update(GameTime gameTime)
         {   
             
-            var velocity = GetDesiredVelocityFromInput();
+            var velocity = GetDesiredVelocityFromInput();          
 
-           
-            this.X += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            this.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (velocity != Vector2.Zero)
             {
+                this.X += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                 bool movingHorizontally = Math.Abs(velocity.X) > Math.Abs(velocity.Y);
                 if (movingHorizontally)
                 {
@@ -162,6 +167,7 @@ namespace Game3
                        
                     }
                 }
+
                 else
                 {
                     if (velocity.Y > 0)
@@ -181,9 +187,12 @@ namespace Game3
             {
                 // If the character was walking, we can set the standing animation
                 // according to the walking animation that is playing:
+                
                 if (currentAnimation == walkRight)
                 {
                     currentAnimation = standRight;
+
+
                 }
                 else if (currentAnimation == walkLeft)
                 {
